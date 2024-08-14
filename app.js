@@ -7,6 +7,8 @@ const errorController = require('./controllers/error');
 const sequelize = require('./util/database');
 const Product = require('./models/product');
 const User = require('./models/user');
+const Cart = require('./models/cart');
+const CartItems = require('./models/cart-items');
 
 const app = express();
 
@@ -15,7 +17,8 @@ app.set('view engine', 'ejs');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
-const { name } = require('ejs');
+// const { name } = require('ejs');
+// const Cart = require('./models/cart');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -39,6 +42,11 @@ app.use(errorController.get404);
 
 Product.belongsTo(User, {constraints : true, onDelete : 'CASCADE'});
 User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, {through : CartItems});
+Product.belongsToMany(Cart, {through : CartItems});
+
 
 const port = 6500;
 
