@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 
 const errorController = require('./controllers/error');
 const sequelize = require('./util/database');
+
 const Product = require('./models/product');
 const User = require('./models/user');
 const Cart = require('./models/cart');
@@ -32,7 +33,6 @@ app.use((req,res, next) => {
     .catch(err => {
         console.log(err);
     });
-
 })
 
 app.use('/admin', adminRoutes);
@@ -44,13 +44,15 @@ Product.belongsTo(User, {constraints : true, onDelete : 'CASCADE'});
 User.hasMany(Product);
 User.hasOne(Cart);
 Cart.belongsTo(User);
-Cart.belongsToMany(Product, {through : CartItems});
+
 Product.belongsToMany(Cart, {through : CartItems});
+Cart.belongsToMany(Product, {through : CartItems});
 
 
 const port = 6500;
 
-sequelize.sync()
+sequelize
+.sync()
 // .sync({force : true})
 .then(() => {
     return User.findByPk(1);
@@ -62,7 +64,10 @@ sequelize.sync()
     return user;
 })
 .then(user => {
-    // console.log(user);
+    return user.createCart();
+})
+.then(cart => {
+    // console.log(cart);
     app.listen(port, () => {
         console.log(`Server is running on port http://localhost:${port}`);
     });
