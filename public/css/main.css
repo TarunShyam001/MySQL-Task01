@@ -205,6 +205,24 @@ form {
   color: white;
 }
 
+.btn-danger {
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  text-decoration: none;
+  font: inherit;
+  border: 1px solid #cb0303;
+  color: #cb0303;
+  background: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn-danger:hover,
+.btn-danger:active {
+  background-color: #cb0303;
+  color: white;
+}
+
 @media (min-width: 768px) {
   .main-header__nav {
     display: flex;

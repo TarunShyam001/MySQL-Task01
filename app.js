@@ -10,6 +10,9 @@ const Product = require('./models/product');
 const User = require('./models/user');
 const Cart = require('./models/cart');
 const CartItems = require('./models/cart-items');
+const Order = require('./models/order');
+const OrderItems = require('./models/order-items');
+
 
 const app = express();
 
@@ -47,6 +50,10 @@ Cart.belongsTo(User);
 
 Product.belongsToMany(Cart, {through : CartItems});
 Cart.belongsToMany(Product, {through : CartItems});
+
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, {through : OrderItems});
 
 
 const port = 6500;
